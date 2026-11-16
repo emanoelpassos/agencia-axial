@@ -1,0 +1,83 @@
+<!doctype html>
+<html lang="pt-BR">
+<head>
+<meta charset="utf-8">
+<title>AXIAL — Propostas de logo</title>
+<link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Geist:wght@400;500;800&family=Geist+Mono:wght@400&display=swap">
+<style>
+:root{--ac:#FF5A1F;--bg:#09090B;--card:#0E0E10;--bd:#27272A;--ink:#FAFAFA;--mut:#A1A1AA}
+*{box-sizing:border-box}
+body{margin:0;background:var(--bg);color:var(--ink);font-family:Geist,system-ui,sans-serif;padding:40px}
+h1{margin:0 0 6px;font-size:28px;letter-spacing:-.03em}
+.sub{color:var(--mut);margin:0 0 32px}
+.grid{display:grid;grid-template-columns:repeat(4,1fr);gap:16px}
+.card{background:var(--card);border:1px solid var(--bd);border-radius:14px;overflow:hidden}
+.tag{font-family:'Geist Mono',monospace;font-size:11px;letter-spacing:.08em;text-transform:uppercase;color:var(--ac)}
+.hd{padding:18px 18px 0}
+.hd h2{margin:6px 0 4px;font-size:18px;letter-spacing:-.02em}
+.hd p{margin:0;color:var(--mut);font-size:13px;line-height:1.5;min-height:58px}
+.big{display:flex;align-items:center;justify-content:center;height:150px;margin:14px 18px 0;border-radius:10px;background:#000}
+.big svg{width:96px;height:96px}
+.word{display:flex;align-items:center;gap:10px;font-weight:800;letter-spacing:-.04em;font-size:22px}
+.word svg{width:28px;height:28px}
+.rows{padding:14px 18px 18px;display:flex;flex-direction:column;gap:10px}
+.row{display:flex;align-items:center;justify-content:center;height:64px;border-radius:10px}
+.dark{background:var(--bg);border:1px solid var(--bd)}
+.light{background:#FAFAFA;color:#09090B}
+.tabs{display:flex;gap:8px}
+.tab{flex:1;display:flex;align-items:center;gap:8px;padding:8px 10px;border-radius:8px 8px 0 0;font-size:12px}
+.tab.t-l{background:#fff;color:#222;border:1px solid #ddd}
+.tab.t-d{background:#35363A;color:#eee}
+.tab img{width:16px;height:16px}
+.sizes{display:flex;align-items:end;gap:12px;justify-content:center;color:var(--mut);font-size:11px}
+.sizes img{display:block;margin:0 auto 4px}
+</style>
+</head>
+<body>
+<h1>AXIAL — logo atual + 3 propostas</h1>
+<p class="sub">Todas mantêm a ideia de "eixo" e as cores do site (#09090B, #FAFAFA, #FF5A1F).</p>
+
+<div class="grid" id="grid"></div>
+
+<script>
+// Cada proposta: símbolo em viewBox 26x26 usando {INK} (cor principal) e {BG} (cor de fundo)
+const P = [
+  { tag: 'Atual', name: 'Círculo com eixo',
+    desc: 'O logo extraído do site: um círculo cortado por uma diagonal laranja, com um ponto no centro.',
+    svg: `<circle cx="13" cy="13" r="11.5" stroke="{INK}" stroke-width="1.5"/><path d="M5 21L21 5" stroke="#FF5A1F" stroke-width="2" stroke-linecap="round"/><circle cx="13" cy="13" r="2.6" fill="{INK}"/>`,
+    fav: `<rect width="26" height="26" rx="6" fill="#09090B"/><circle cx="13" cy="13" r="8.6" stroke="#FAFAFA" stroke-width="1.9"/><path d="M7 19L19 7" stroke="#FF5A1F" stroke-width="2.5" stroke-linecap="round"/><circle cx="13" cy="13" r="2.4" fill="#FAFAFA"/>` },
+  { tag: 'Proposta 1', name: 'Eixo partido',
+    desc: 'O círculo vira duas metades sólidas, deslocadas pelo eixo. Mais peso: fica forte em tamanho pequeno.',
+    svg: `<path d="M5.93 20.07A10 10 0 0 1 20.07 5.93Z" fill="{INK}" transform="translate(-1.3 -1.3)"/><path d="M20.07 5.93A10 10 0 0 1 5.93 20.07Z" fill="{INK}" transform="translate(1.3 1.3)"/><path d="M3.5 22.5L22.5 3.5" stroke="#FF5A1F" stroke-width="1.8" stroke-linecap="round"/>`,
+    fav: `<rect width="26" height="26" rx="6" fill="#09090B"/><g transform="translate(13 13) scale(.78) translate(-13 -13)"><path d="M5.93 20.07A10 10 0 0 1 20.07 5.93Z" fill="#FAFAFA" transform="translate(-1.6 -1.6)"/><path d="M20.07 5.93A10 10 0 0 1 5.93 20.07Z" fill="#FAFAFA" transform="translate(1.6 1.6)"/><path d="M3.5 22.5L22.5 3.5" stroke="#FF5A1F" stroke-width="2.6" stroke-linecap="round"/></g>` },
+  { tag: 'Proposta 2', name: 'X de eixo',
+    desc: 'O "X" do nome AXIAL como os eixos de um gráfico: um traço claro, um laranja e o ponto de origem no meio.',
+    svg: `<path d="M5 5L21 21" stroke="{INK}" stroke-width="3" stroke-linecap="round"/><path d="M5 21L21 5" stroke="#FF5A1F" stroke-width="3" stroke-linecap="round"/><circle cx="13" cy="13" r="4.4" fill="{BG}"/><circle cx="13" cy="13" r="2.4" fill="{INK}"/>`,
+    fav: `<rect width="26" height="26" rx="6" fill="#09090B"/><path d="M7 7L19 19" stroke="#FAFAFA" stroke-width="3" stroke-linecap="round"/><path d="M7 19L19 7" stroke="#FF5A1F" stroke-width="3" stroke-linecap="round"/><circle cx="13" cy="13" r="3.8" fill="#09090B"/><circle cx="13" cy="13" r="2.1" fill="#FAFAFA"/>` },
+  { tag: 'Proposta 3', name: 'A com eixo',
+    desc: 'Monograma: a letra A sem a barra, cruzada por um eixo laranja inclinado. Funciona bem como avatar no Instagram.',
+    svg: `<path d="M4.5 22L13 4L21.5 22" stroke="{INK}" stroke-width="2.6" stroke-linecap="round" stroke-linejoin="round"/><path d="M2.5 18.5L23.5 12" stroke="#FF5A1F" stroke-width="2.4" stroke-linecap="round"/>`,
+    fav: `<rect width="26" height="26" rx="6" fill="#09090B"/><path d="M6.5 20L13 6L19.5 20" stroke="#FAFAFA" stroke-width="2.8" stroke-linecap="round" stroke-linejoin="round"/><path d="M4.5 17L21.5 12" stroke="#FF5A1F" stroke-width="2.6" stroke-linecap="round"/>` },
+];
+const sym = (s, ink, bg) => `<svg viewBox="0 0 26 26" fill="none" xmlns="http://www.w3.org/2000/svg">${s.replaceAll('{INK}', ink).replaceAll('{BG}', bg)}</svg>`;
+const favUrl = s => 'data:image/svg+xml,' + encodeURIComponent(`<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 26 26" fill="none">${s}</svg>`);
+document.getElementById('grid').innerHTML = P.map(p => `
+  <div class="card">
+    <div class="hd"><span class="tag">${p.tag}</span><h2>${p.name}</h2><p>${p.desc}</p></div>
+    <div class="big">${sym(p.svg, '#FAFAFA', '#000')}</div>
+    <div class="rows">
+      <div class="row dark"><span class="word">${sym(p.svg, '#FAFAFA', '#09090B')}AXIAL</span></div>
+      <div class="row light"><span class="word">${sym(p.svg, '#09090B', '#FAFAFA')}AXIAL</span></div>
+      <div class="tabs">
+        <div class="tab t-l"><img src="${favUrl(p.fav)}" alt="">AXIAL — Agência</div>
+        <div class="tab t-d"><img src="${favUrl(p.fav)}" alt="">AXIAL — Agência</div>
+      </div>
+      <div class="sizes">
+        <div><img src="${favUrl(p.fav)}" width="16" height="16" alt="">16</div>
+        <div><img src="${favUrl(p.fav)}" width="32" height="32" alt="">32</div>
+        <div><img src="${favUrl(p.fav)}" width="64" height="64" alt="">64</div>
+      </div>
+    </div>
+  </div>`).join('');
+</script>
+</body>
