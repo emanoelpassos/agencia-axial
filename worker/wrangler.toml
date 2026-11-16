@@ -1,0 +1,24 @@
+# Worker que recebe o formulário de contato do site e envia por e-mail.
+# Roda na borda da Cloudflare, só no caminho /api/contato: o resto do site
+# continua vindo do servidor em casa pelo Tunnel.
+name = "axial-contato"
+main = "src/index.js"
+compatibility_date = "2026-11-01"
+workers_dev = false
+
+routes = [
+  { pattern = "agenciaaxial.com.br/api/contato", zone_name = "agenciaaxial.com.br" }
+]
+
+# Binding de envio do Email Routing: só entrega para destinos VERIFICADOS
+# em Email Routing → Destination addresses. O destino fica no secret TO
+# (`npx wrangler secret put TO`), fora do Git.
+[[send_email]]
+name = "EMAIL"
+
+[vars]
+FROM = "formulario@agenciaaxial.com.br"
+ALLOWED_ORIGINS = "https://agenciaaxial.com.br,https://www.agenciaaxial.com.br"
+
+[observability]
+enabled = true

@@ -935,9 +935,11 @@ a.info-it:hover .v{color:var(--ac)}
                   <div><label class="lbl" for="f-mail">E-mail</label><input class="inp" id="f-mail" name="email" type="email" placeholder="voce@empresa.com.br" required="required"></div>
                   <div><label class="lbl" for="f-tel">WhatsApp</label><input class="inp" id="f-tel" name="whatsapp" type="tel" placeholder="(00) 00000-0000"></div>
                   <div class="full"><label class="lbl" for="f-msg">Sobre o projeto</label><textarea class="inp" id="f-msg" name="mensagem" placeholder="Conte o que sua empresa precisa…" value="{{msg}}" onChange="{{onMsg}}"></textarea></div>
+                  <div style="position: absolute; left: -9999px; width: 1px; height: 1px; overflow: hidden" aria-hidden="true"><label for="f-site">Não preencha este campo</label><input id="f-site" name="site" type="text" tabindex="-1" autocomplete="off"></div>
                 </div>
                 <div class="form-f">
-                  <p>Seus dados são usados apenas para responder este contato.</p>
+                  <sc-if value="{{formOk}}" hint-placeholder-val="{{true}}"><p>{{formNota}}</p></sc-if>
+                  <sc-if value="{{formErro}}" hint-placeholder-val="{{false}}"><p role="alert" style="color: #FF8A65">{{erro}}</p></sc-if>
                   <button class="btn btn-ac btn-lg mag" type="submit" onMouseMove="{{mag}}" onMouseLeave="{{magOut}}"><span class="roll"><span data-t="Enviar mensagem">Enviar mensagem</span></span><svg class="arr" width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" aria-hidden="true"><path d="M5 12h14M13 6l6 6-6 6"></path></svg></button>
                 </div>
               </form>
@@ -1083,8 +1085,32 @@ class Component extends DCLogic {
       setPages: function (e) { self.setState({ pages: +e.target.value }); },
       toBrief: function () { self.setState({ msg: self.summary, sent: false }); go('contato'); },
       onMsg: function (e) { self.setState({ msg: e.target.value }); },
-      submit: function (e) { if (e && e.preventDefault) e.preventDefault(); self.setState({ sent: true }); },
-      reset: function () { self.setState({ sent: false, msg: '' }); },
+      // Envia o formulário para o Worker /api/contato (Cloudflare), que manda o e-mail
+      submit: function (e) {
+        if (e && e.preventDefault) e.preventDefault();
+        if (self.state.sending) return;
+        var form = (e && (e.currentTarget || e.target)) || document.querySelector('#contato form');
+        var dados = {};
+        new FormData(form).forEach(function (v, k) { dados[k] = v; });
+        dados.mensagem = self.state.msg || dados.mensagem || '';
+        self.setState({ sending: true, erro: '' });
+        fetch('/api/contato', {
+          method: 'POST',
+          headers: { 'Content-Type': 'application/json' },
+          body: JSON.stringify(dados)
+        }).then(function (r) {
+          return r.json().catch(function () { return {}; }).then(function (j) {
+            if (!r.ok || !j.ok) throw new Error(j.erro || 'Não foi possível enviar agora. Fale com a gente pelo WhatsApp.');
+          });
+        }).then(function () {
+          self.setState({ sending: false, sent: true, msg: '' });
+        }).catch(function (err) {
+          var m = err && err.message;
+          if (!m || m === 'Failed to fetch') m = 'Sem conexão com o servidor. Tente de novo ou fale pelo WhatsApp.';
+          self.setState({ sending: false, erro: m });
+        });
+      },
+      reset: function () { self.setState({ sent: false, msg: '', erro: '' }); },
       cmdOpen: function () { self.setState({ cmd: true, q: '' }); },
       cmdClose: function () { self.setState({ cmd: false, q: '' }); },
       cmdQ: function (e) { self.setState({ q: e.target.value }); },
@@ -1465,6 +1491,8 @@ class Component extends DCLogic {
       faqs: faqs,
       msg: s.msg || '', onMsg: h.onMsg, submit: h.submit, reset: h.reset,
       sent: !!s.sent, notSent: !s.sent,
+      erro: s.erro || '', formErro: !!s.erro, formOk: !s.erro,
+      formNota: s.sending ? 'Enviando…' : 'Seus dados são usados apenas para responder este contato.',
       clock: s.clock || '--:--',
       cmd: !!s.cmd, q: s.q || '', cmdItems: cmdItems, cmdEmpty: cmdItems.length === 0,
       cmdOpen: h.cmdOpen, cmdClose: h.cmdClose, cmdQ: h.cmdQ, cmdKey: h.cmdKey
